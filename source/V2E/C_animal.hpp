@@ -178,6 +178,17 @@ protected :
         int decision ( Environment * environment, std::vector<std::unordered_multimap<int, Animal *>> * VisibleAnimals, std::vector<std::unordered_multimap<int, Plant * >> * VisiblePlants, std::vector<std::vector<int>> * CellSpecs );
 };
 
+class Rainette: public Animal
+{
+public :
+        ipera ( int id = 5, std::string newName = "Rainette" ) :Animal ( id, newName ) {}
+        ~Rainette() {};
+protected :
+        int decision ( Environment * environment, std::vector<std::unordered_multimap<int, Animal *>> * VisibleAnimals, std::vector<std::unordered_multimap<int, Plant * >> * VisiblePlants, std::vector<std::vector<int>> * CellSpecs );
+
+
+};
+
 #endif // __C_ANIMALS_H_INCLUDED__
 
 
