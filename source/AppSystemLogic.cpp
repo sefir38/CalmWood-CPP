@@ -249,14 +249,30 @@ int AppSystemLogic::shutdown()
         cout << "Number of birth ( animals ) : " << spawnCount << endl;
 
         cout << "Number of Leucorrhinia at simulation start : " << environment.MaxNumberAgentAnimal * environment.MaxNumberAgentByTypeAnimal[0] << endl;
+        cout << "Number of Hyla at simulation start : " << environment.MaxNumberAgentAnimal * environment.MaxNumberAgentByTypeAnimal[1] << endl;
+        cout << "Number of viperia at simulation start : " << environment.MaxNumberAgentAnimal * environment.MaxNumberAgentByTypeAnimal[4] << endl;
+
+
 
         int LeucorrhiniaCount = 0;
+        int HylaCount = 0;
+        int ViperiaCount = 0;
 
         for ( agentAnimal = animals.begin(); agentAnimal != animals.end() ; ++agentAnimal )
                 if ( ( * agentAnimal )->getID() == 0 )
                         LeucorrhiniaCount++;
 
+        for ( agentAnimal = animals.begin(); agentAnimal != animals.end() ; ++agentAnimal )
+                if ( ( * agentAnimal )->getID() == 1 )
+                        HylaCount++;
+
+        for ( agentAnimal = animals.begin(); agentAnimal != animals.end() ; ++agentAnimal )
+                if ( ( * agentAnimal )->getID() == 4 )
+                        ViperiaCount++;
+
         cout << "Number of Leucorrhinia at the end : " << LeucorrhiniaCount << endl;
+        cout << "Number of Hyla at the end : " << HylaCount << endl;
+        cout << "Number of Viperia at the end : " << ViperiaCount << endl;
 
         cout << "Temperature at the end of the simulation : " << environment.getEnvironmentParameters() [0] << endl;
 
@@ -281,7 +297,7 @@ int AppSystemLogic::spawn ( Animal * animal )
                         newAnimal = new Leucorrhinia ( 0, "Leucorrhinia", {1,24,1}, {0,0,0,100,1,20}, {1,1,2}, {1,1,1}, true );
                         break;
                 case 1 :
-                        newAnimal = new Hyla();
+                        newAnimal = new Hyla ( 1, "Leucorrhinia", {1,24,1}, {0,0,0,100,1,20}, {1,1,2}, {1,1,1}, true);
                         break;
                 case 2 :
                         newAnimal = new Phengaris();
@@ -290,7 +306,7 @@ int AppSystemLogic::spawn ( Animal * animal )
                         newAnimal = new Zootoca();
                         break;
                 case 4 :
-                        newAnimal = new Vipera();
+                        newAnimal = new Vipera(4, "Vipera", {1,24,1}, {0,0,0,100,1,20}, {1,1,2}, {1,1,1}, true);
                         break;
                 }
 
