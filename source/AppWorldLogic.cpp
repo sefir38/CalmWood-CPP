@@ -94,10 +94,16 @@ int AppWorldLogic::update()
 
         // show game info
         label->setText ( String::format (
-                                 "Number of Leucorrhinia (egg, larvae, adult) : %d, %d, %d\nTemperature : %f\nHygrometry : %f\nAntrhopization rate : %f\nMonth : %d, Year : %d",
+                                "Number of Leucorrhinia (egg, larvae, adult) : %d, %d, %d \nNumber of Hyla (egg, larvae, adult) : %d, %d, %d \nNumber of Vipera(egg, larvae, adult) : %d, %d, %d\nTemperature : %f\nHygrometry : %f\nAntrhopization rate : %f\nMonth : %d, Year : %d",
                                  getAnimalCount ( 0,0 ),
                                  getAnimalCount ( 0,1 ),
                                  getAnimalCount ( 0,2 ),
+                                 getAnimalCount ( 1,0 ),
+                                 getAnimalCount ( 1,1 ),
+                                 getAnimalCount ( 1,2 ),
+                                 getAnimalCount ( 4,0 ),
+                                 getAnimalCount ( 4,1 ),
+                                 getAnimalCount ( 4,2 ),
                                  systemlogic_ptr->environment.getEnvironmentParameters() [0],
                                  systemlogic_ptr->environment.getEnvironmentParameters() [1],
                                  systemlogic_ptr->environment.getEnvironmentParameters() [2],
