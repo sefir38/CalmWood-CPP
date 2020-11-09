@@ -12,6 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+/* 
+ * Copyright 2020 Axel Polin, univ_apolin@protonmail.com
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * 
 */
 #ifndef __C_ANIMALS_H_INCLUDED__
@@ -121,6 +135,7 @@ protected :
         int attack ( Environment * environment, std::unordered_multimap<int, Animal *> * VisibleAnimals, int intruderX, int intruderY, int specie );
         int growth ( Environment * environment );
         int dead ( Environment * environment );
+        int predate ( Environment * environment, std::unordered_multimap<int, Animal *> * VisibleAnimals, int intruderX, int intruderY, int specie );
 
 };
 
@@ -145,7 +160,14 @@ protected :
 class Hyla: public Animal
 {
 public :
-        Hyla ( int id = 1, std::string newName = "hyla" ) :Animal ( id, newName ) {}
+        Hyla ( int id = 1, 
+        std::string newName = "hyla",
+        std::vector<unsigned int> lifeCycle = {1,24,1},
+        std::vector<int> probabilities = {80,70,20,0,40,10,0,60},
+        std::vector<int> detectionRadius = {1,1,2},
+        std::vector<int> actionRadius = {1,1,1},
+        bool isBorn = false,
+        int newSpawnNumber = 100 ) :Animal ( id, newName ,lifeCycle, probabilities, detectionRadius, actionRadius, isBorn, newSpawnNumber) {}
         ~Hyla() {};
 protected :
        int decision ( Environment * environment, std::vector<std::unordered_multimap<int, Animal *>> * VisibleAnimals, std::vector<std::unordered_multimap<int, Plant * >> * VisiblePlants, std::vector<std::vector<int>> * CellSpecs );
@@ -154,7 +176,7 @@ protected :
 class Phengaris: public Animal
 {
 public :
-        Phengaris ( int id = 2, std::string newName = "phengaris" ) :Animal ( id, newName ) {}
+        Phengaris ( int id = 2, std::string newName = "phengaris") :Animal ( id, newName ) {}
         ~Phengaris() {};
 protected :
         int decision ( Environment * environment, std::vector<std::unordered_multimap<int, Animal *>> * VisibleAnimals, std::vector<std::unordered_multimap<int, Plant * >> * VisiblePlants, std::vector<std::vector<int>> * CellSpecs );
@@ -172,26 +194,35 @@ protected :
 class Vipera: public Animal
 {
 public :
-        Vipera ( int id = 4, std::string newName = "vipera" ) :Animal ( id, newName ) {}
+        Vipera ( int id = 4, 
+        std::string newName = "vipera",
+        std::vector<unsigned int> lifeCycle = {1,24,1},
+        std::vector<int> probabilities = {80,70,20,0,40,10,0,60},
+        std::vector<int> detectionRadius = {1,1,2},
+        std::vector<int> actionRadius = {1,1,1},
+        bool isBorn = false,
+        int newSpawnNumber = 100 
+        ) :Animal ( id, newName ) {}
         ~Vipera() {};
 protected :
         int decision ( Environment * environment, std::vector<std::unordered_multimap<int, Animal *>> * VisibleAnimals, std::vector<std::unordered_multimap<int, Plant * >> * VisiblePlants, std::vector<std::vector<int>> * CellSpecs );
 };
 
+
 class Rainette: public Animal
 {
 public :
-        ipera ( int id = 5, std::string newName = "Rainette" ) :Animal ( id, newName ) {}
+        Rainette ( int id = 5, 
+        std::string newName = "Rainette",
+        std::vector<unsigned int> lifeCycle = {1,24,1},
+        std::vector<int> probabilities = {80,70,20,0,40,10,0,60},
+        std::vector<int> detectionRadius = {1,1,2},
+        std::vector<int> actionRadius = {1,1,1},
+        bool isBorn = false,
+        int newSpawnNumber = 100 
+        ) :Animal ( id, newName ) {}
         ~Rainette() {};
 protected :
         int decision ( Environment * environment, std::vector<std::unordered_multimap<int, Animal *>> * VisibleAnimals, std::vector<std::unordered_multimap<int, Plant * >> * VisiblePlants, std::vector<std::vector<int>> * CellSpecs );
-
-
 };
-
 #endif // __C_ANIMALS_H_INCLUDED__
-
-
-
-
-
