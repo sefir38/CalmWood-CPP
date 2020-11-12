@@ -339,25 +339,25 @@ int Animal::reproduction ( std::unordered_multimap<int, Animal *> * VisibleAnima
         return 0;
 }
 
-int Animal::attack ( Environment * environment, std::unordered_multimap<int, Animal *> * VisibleAnimals, int intruderX, int intruderY, int specie )
-{
-        std::pair<MMAnimalIterator, MMAnimalIterator> LeucoFound = VisibleAnimals->equal_range ( 0 );
-        int X, Y = location[0],location[1];
+// int Animal::attack ( Environment * environment, std::unordered_multimap<int, Animal *> * VisibleAnimals, int intruderX, int intruderY, int specie )
+// {
+//         std::pair<MMAnimalIterator, MMAnimalIterator> LeucoFound = VisibleAnimals->equal_range ( 0 );
+//         int X, Y = location[0],location[1];
 
-        int trigger = 0;
+//         int trigger = 0;
 
-        for ( MMAnimalIterator it = LeucoFound.first; it != LeucoFound.second; ++it ) {
-                if ( it->second->getSex() == 0 ) {
-                        trigger = runRNG ( 0, 1 );
-                        if ( trigger == 0 )
-                                it->second->flee ( environment );
-                        if ( trigger == 1 )
-                                move ( environment );
-                }
-        }
+//         for ( MMAnimalIterator it = LeucoFound.first; it != LeucoFound.second; ++it ) {
+//                 if ( it->second->getSex() == 0 ) {
+//                         trigger = runRNG ( 0, 1 );
+//                         if ( trigger == 0 )
+//                                 it->second->flee ( environment );
+//                         if ( trigger == 1 )
+//                                 move ( environment );
+//                 }
+//         }
 
-        return 0;
-}
+//         return 0;
+// }
 
 int Animal::dead ( Environment * environment )
 {
@@ -367,3 +367,49 @@ int Animal::dead ( Environment * environment )
         return 0;
 }
 
+int Animal::attack ( Environment * environment, std::unordered_multimap<int, Animal *> * VisibleAnimals, int intruderX, int intruderY, int specie )
+{
+        std::pair<MMAnimalIterator, MMAnimalIterator> LeucoFound = VisibleAnimals->equal_range ( 0 );
+        std::pair<MMAnimalIterator, MMAnimalIterator> HylaFound = VisibleAnimals->equal_range ( 1 );
+        std::pair<MMAnimalIterator, MMAnimalIterator> ViperaFound = VisibleAnimals->equal_range ( 4 );
+        int X, Y = location[0],location[1];
+
+        int trigger = 0;
+
+        int gt;
+        gt = getGrowthState() ;
+        int id;
+        id = getID();
+
+        if (id == 4){
+                for ( MMAnimalIterator it = HylaFound.first; it != HylaFound.second; ++it ) {
+                if (it->second->getGrowthState() == 2){
+                        it->second-> dead(environment);
+                        eat();
+                }
+        }
+        }
+
+        if (id == 1){
+                for ( MMAnimalIterator it = LeucoFound.first; it != LeucoFound.second; ++it ) {
+                if (it->second->getGrowthState() == 1){
+                        it->second-> dead(environment);
+                        eat();
+                }
+        }
+        }
+
+        if (id == 0){
+                for ( MMAnimalIterator it = HylaFound.first; it != HylaFound.second; ++it ) {
+                if (it->second->getGrowthState() == 1){
+                        it->second-> dead(environment);
+                        eat();
+                }
+        }
+        }
+
+        
+        
+
+        return 0;
+}
