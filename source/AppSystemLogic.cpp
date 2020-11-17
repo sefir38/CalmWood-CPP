@@ -180,6 +180,35 @@ int AppSystemLogic::update()
                                 }
 
                                 if ( ( *agentAnimal )->isDead() ) {
+                                        //compter le nombre de mort nature (vieillesse, probabilité) par espèce
+                                        if((*agentAnimal)->getDeadType()==0 && (*agentAnimal)->getID()==0)
+                                                deadLeuco[(*agentAnimal)->getDeadType()]+=1;
+                                        if((*agentAnimal)->getDeadType()==0 && (*agentAnimal)->getID()==1)
+                                                deadHyla[(*agentAnimal)->getDeadType()]+=1;
+                                        if((*agentAnimal)->getDeadType()==0 && (*agentAnimal)->getID()==4)
+                                                deadVipera[(*agentAnimal)->getDeadType()]+=1;
+                                        //mort de faim (saciety index)
+                                        if((*agentAnimal)->getDeadType()==1 && (*agentAnimal)->getID()==0)
+                                                deadLeuco[(*agentAnimal)->getDeadType()]+=1;
+                                        if((*agentAnimal)->getDeadType()==1 && (*agentAnimal)->getID()==1)
+                                                deadHyla[(*agentAnimal)->getDeadType()]+=1;
+                                        if((*agentAnimal)->getDeadType()==1 && (*agentAnimal)->getID()==4)
+                                                deadVipera[(*agentAnimal)->getDeadType()]+=1;
+                                        //mort sous contrainte environnementale
+                                        if((*agentAnimal)->getDeadType()==2 && (*agentAnimal)->getID()==0)
+                                                deadLeuco[(*agentAnimal)->getDeadType()]+=1;
+                                        if((*agentAnimal)->getDeadType()==2 && (*agentAnimal)->getID()==1)
+                                                deadHyla[(*agentAnimal)->getDeadType()]+=1;
+                                        if((*agentAnimal)->getDeadType()==2 && (*agentAnimal)->getID()==4)
+                                                deadVipera[(*agentAnimal)->getDeadType()]+=1;
+                                        //mort par prédation
+                                        if((*agentAnimal)->getDeadType()==3 && (*agentAnimal)->getID()==0)
+                                                deadLeuco[(*agentAnimal)->getDeadType()]+=1;
+                                        if((*agentAnimal)->getDeadType()==3 && (*agentAnimal)->getID()==1)
+                                                deadHyla[(*agentAnimal)->getDeadType()]+=1;
+                                        if((*agentAnimal)->getDeadType()==3 && (*agentAnimal)->getID()==4)
+                                                deadVipera[(*agentAnimal)->getDeadType()]+=1;
+
                                         deadCount += 1;
                                         agentAnimal = animals.erase ( agentAnimal );
 
@@ -279,6 +308,7 @@ int AppSystemLogic::shutdown()
         cout << "Hygrometry at the end of the simulation : " << environment.getEnvironmentParameters() [1] << endl;
 
         cout << "Antrhopization at the end of the simulation : " << environment.getEnvironmentParameters() [2] << endl;
+        cout << "Number of Leucorrhinia mort naturellement : " << deadLeuco[0] << endl;
 
         return 1;
 }
