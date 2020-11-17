@@ -44,21 +44,25 @@ int Leucorrhinia::decision ( Environment * environment, std::vector<std::unorder
         satietyIndex -= 10;
 
         if ( temperature < 15.0 || temperature > 30.0 ) {
+                deadType=2;
                 dead ( environment );
                 return 0;
         }
 
         if ( antropizationRate > 0.8 ) {
+                deadType=2;
                 dead ( environment );
                 return 0;
         }
 
         if ( hygrometry < 0.2 || hygrometry > 0.95 ) {
+                deadType=2;
                 dead ( environment );
                 return 0;
         }
 
         if ( actionProbability < deadProbability ) {
+                deadType=0;
                 dead ( environment );
                 return 0;
         }
@@ -196,21 +200,25 @@ int Hyla::decision ( Environment * environment, std::vector<std::unordered_multi
         satietyIndex -= 10;
 
         if ( temperature < 15.0 || temperature > 30.0 ) {
+                deadType=2;
                 dead ( environment );
                 return 0;
         }
 
         if ( antropizationRate > 0.8 ) {
+                deadType=2;
                 dead ( environment );
                 return 0;
         }
 
         if ( hygrometry < 0.2 || hygrometry > 0.95 ) {
+                deadType=2;
                 dead ( environment );
                 return 0;
         }
 
         if ( actionProbability < deadProbability ) {
+                deadType=2;
                 dead ( environment );
                 return 0;
         }
@@ -358,21 +366,25 @@ int Vipera::decision ( Environment * environment, std::vector<std::unordered_mul
         satietyIndex -= 10;
 
         if ( temperature < 15.0 || temperature > 30.0 ) {
+                deadType=2;
                 dead ( environment );
                 return 0;
         }
 
         if ( antropizationRate > 0.8 ) {
+                deadType=2;
                 dead ( environment );
                 return 0;
         }
 
         if ( hygrometry < 0.2 || hygrometry > 0.95 ) {
+                deadType=2;
                 dead ( environment );
                 return 0;
         }
 
         if ( actionProbability < deadProbability ) {
+                deadType=2;
                 dead ( environment );
                 return 0;
         }
