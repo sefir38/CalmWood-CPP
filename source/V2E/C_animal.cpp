@@ -60,6 +60,7 @@ Animal::Animal ( int newId,
         growthState = isBorn ? 0 : runRNG ( 0,2 );
 
         spawnNumber = newSpawnNumber;
+        deadType=-1;
 
 }
 
@@ -188,6 +189,13 @@ int Animal::getSpawnNumber()
 }
 
 
+
+int Animal::getDeadType()
+{
+        return deadType;
+}
+
+
 int Animal::detection ( Environment * environment )
 {
         int currentX = location[0];
@@ -203,7 +211,15 @@ int Animal::detection ( Environment * environment )
         std::vector<std::vector<int>> CellSpecs;
         std::vector<std::vector<int>> detectionRange;
 
-        if ( environment->getCell ( currentX, currentY )->getCellContentSpecs() [0] == 0 )
+
+        if (environment->getCell ( currentX, currentY )->getCellContentSpecs() [0] == 0 )
+                deadType=2;
+                dead ( environment );
+        if (environment->getCell ( currentX, currentY )->getCellContentSpecs() [0] == 1 )
+                deadType=2;
+                dead ( environment );
+        if (environment->getCell ( currentX, currentY )->getCellContentSpecs() [0] == 4 )
+                deadType=2;
                 dead ( environment );
 
         for ( int i = ( 0 - detectionRadius[growthState] ); i <= detectionRadius[growthState]; ++i ) {
@@ -306,6 +322,7 @@ int Animal::growth ( Environment * environment )
         if ( timeLifeCycle >= lifeCycle[growthState] ) {
                 if ( satietyIndex < 80 || growthState+1 >= 3 ) {
                         dead ( environment );
+                        deadType=0;
                         return 0;
                 }
 
