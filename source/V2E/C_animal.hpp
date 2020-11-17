@@ -57,6 +57,8 @@ public :
         
         int growthFinished();
 
+        int getDeadType();
+
         bool getHiddenState();
 
         int setSpawnAbility ( bool newSpawnAbility );
@@ -95,6 +97,7 @@ protected :
         int reproductionProbability = 0;
         int attackProbability = 0;
         int protectionProbability = 0;
+        int deadType;
 
         unsigned int timeLifeCycle = 0;
         std::vector<unsigned int> lifeCycle{0,0,0};
@@ -104,6 +107,7 @@ protected :
         bool spawnAbility = false;
         bool growing = false;
         bool protectTerritory = false;
+
 
         std::vector<int> territoryCoordinates{0,0};
 
