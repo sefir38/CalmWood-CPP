@@ -52,7 +52,16 @@ protected :
     vector<Animal *>::iterator agentAnimal;
     vector<Plant *>::iterator agentPlant;
 
-    int deadCount = 0;
+    int deadNatCount= 0;
+    int deadStarvCount=0;
+    int deadEnvCount=0;
+    int deadPredCount=0;
+    vector<int>deadLeuco{deadNatCount,deadStarvCount,deadEnvCount,deadPredCount};
+    vector<int>deadHyla{deadNatCount,deadStarvCount,deadEnvCount,deadPredCount};
+    vector<int>deadVipera{deadNatCount,deadStarvCount,deadEnvCount,deadPredCount};
+    vector<vector<int>>deadCountVector{deadLeuco,deadHyla,deadVipera};
+    int deadCount=0;
+
     int spawnCount = 0;
 
     bool simulationEnd = false;
