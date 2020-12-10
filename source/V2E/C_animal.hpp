@@ -50,6 +50,11 @@ public :
 
         bool isDead();
         bool isSpawn();
+
+        bool isReproduction(); //nouveau truc
+        int setReproductionState( bool reproductionState );
+        Animal * getFecondedAnimal();
+
         bool isGrowing();
         
         int stopSimulation();
@@ -105,6 +110,10 @@ protected :
         bool hidden = false;
         bool death = false;
         bool spawnAbility = false;
+
+        bool feconded = false; // nouveau
+        Animal * fecondedAnimal; //reference femelle
+
         bool growing = false;
         bool protectTerritory = false;
 
@@ -135,11 +144,11 @@ public :
         Leucorrhinia ( int id = 0,
                        std::string newName = "leucorrhinia",
                        std::vector<unsigned int> lifeCycle = {1,24,1},
-                       std::vector<int> probabilities = {80,70,20,0,40,10,0,60},
+                       std::vector<int> probabilities = {80,70,20,80,40,10,0,80},
                        std::vector<int> detectionRadius = {1,1,2},
                        std::vector<int> actionRadius = {1,1,1},
                        bool isBorn = false,
-                       int newSpawnNumber = 100
+                       int newSpawnNumber = 5
                      ) : Animal ( id, newName, lifeCycle, probabilities, detectionRadius, actionRadius, isBorn, newSpawnNumber ) {}
         ~Leucorrhinia() {};
 protected :
@@ -153,11 +162,11 @@ public :
         Hyla ( int id = 1, 
         std::string newName = "hyla",
         std::vector<unsigned int> lifeCycle = {1,24,1},
-        std::vector<int> probabilities = {80,70,20,0,40,10,0,60},
+        std::vector<int> probabilities = {80,70,20,80,40,10,0,60},
         std::vector<int> detectionRadius = {1,1,2},
         std::vector<int> actionRadius = {1,1,1},
         bool isBorn = false,
-        int newSpawnNumber = 100 ) :Animal ( id, newName ,lifeCycle, probabilities, detectionRadius, actionRadius, isBorn, newSpawnNumber) {}
+        int newSpawnNumber = 5 ) :Animal ( id, newName ,lifeCycle, probabilities, detectionRadius, actionRadius, isBorn, newSpawnNumber) {}
         ~Hyla() {};
 protected :
        int decision ( Environment * environment, std::vector<std::unordered_multimap<int, Animal *>> * VisibleAnimals, std::vector<std::unordered_multimap<int, Plant * >> * VisiblePlants, std::vector<std::vector<int>> * CellSpecs );
@@ -187,11 +196,11 @@ public :
         Vipera ( int id = 4, 
         std::string newName = "vipera",
         std::vector<unsigned int> lifeCycle = {1,24,1},
-        std::vector<int> probabilities = {80,70,20,0,40,10,0,60},
+        std::vector<int> probabilities = {80,70,20,1,40,10,0,60},
         std::vector<int> detectionRadius = {1,1,2},
         std::vector<int> actionRadius = {1,1,1},
         bool isBorn = false,
-        int newSpawnNumber = 100 
+        int newSpawnNumber = 5 
         ) :Animal ( id, newName ) {}
         ~Vipera() {};
 protected :

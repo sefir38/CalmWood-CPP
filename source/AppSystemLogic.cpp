@@ -169,16 +169,29 @@ int AppSystemLogic::update()
                                 runShuffle ( &animals );
                                 agentAnimal = animals.begin();
                         }
+                        // for ( int agent = 0; agent < environment.MaxAgentRun; ++agent ) {
+                        //         cout << (*agentAnimal)->isSpawn() << std::endl;
+                        //         if ( ( *agentAnimal )->isSpawn() ) { //>isSpawn()
+                        //                 spawnCount += 1;
+                        //                 spawn ( ( *agentAnimal ) );
+                        //                 cout << "update spawn " << std::endl;
+                        //         if (0==0){
+                        //                 spawn ( ( *agentAnimal ) );
+                        //                 cout << "update spawn 2 " << std::endl;
+                        //         }
 
+                        //         }
+                        // }
                         for ( int agent = 0; agent < environment.MaxAgentRun; ++agent ) {
 
                                 ( *agentAnimal )->run ( &environment );
-
+                                //std::cout <<  ( *agentAnimal )->isDead()  << std::endl;
                                 if ( ( *agentAnimal )->isGrowing() && ( *agentAnimal )->getGrowthState() == 2 ) {
                                         worldlogic_ptr->createAnimal ( ( *agentAnimal ) );
                                         ( *agentAnimal )->growthFinished();
                                 }
-
+                                
+                                
                                 if ( ( *agentAnimal )->isDead() ) {
                                         //compter le nombre de mort nature (vieillesse, probabilité) par espèce
                                         if((*agentAnimal)->getDeadType()==0 && (*agentAnimal)->getID()==0)
@@ -208,7 +221,8 @@ int AppSystemLogic::update()
                                                 deadHyla[(*agentAnimal)->getDeadType()]+=1;
                                         if((*agentAnimal)->getDeadType()==3 && (*agentAnimal)->getID()==4)
                                                 deadVipera[(*agentAnimal)->getDeadType()]+=1;
-
+                                        cout << "update mort " << std::endl;
+                                        //cout << (*agentAnimal)->getID() << std::endl;
                                         deadCount += 1;
                                         agentAnimal = animals.erase ( agentAnimal );
 
@@ -219,12 +233,14 @@ int AppSystemLogic::update()
                                         }
 
                                         --agentAnimal;
-
-                                } else if ( ( *agentAnimal )->isSpawn() ) {
-                                        spawnCount += 1;
-                                        spawn ( ( *agentAnimal ) );
                                 }
-
+                                else if ( ( *agentAnimal )->isReproduction() ) { //>isSpawn()
+                                        spawnCount += 1;
+                                        spawn ( ( *agentAnimal )->getFecondedAnimal()  );
+                                        ( *agentAnimal )->setReproductionState( false );
+                                        cout << "update spawn " << std::endl;
+                                } 
+                                
                                 runTime = environment.RunDuration;
 
                                 ++agentAnimal;
@@ -318,7 +334,7 @@ int AppSystemLogic::spawn ( Animal * animal )
         Animal * newAnimal;
         vector<int> spawnLocation = animal->getLocation();
         int id = animal->getID();
-
+        std::cout << "spawn appsystem" << std::endl;
         for ( int i = 0 ; i < animal->getSpawnNumber() ; ++i ) {
 
                 switch ( id ) {
@@ -343,7 +359,7 @@ int AppSystemLogic::spawn ( Animal * animal )
                 newAnimal->setLocation ( spawnLocation );
                 environment.getCell ( spawnLocation[0],spawnLocation[1] )->addAnimal ( newAnimal->getID(), newAnimal );
                 animals.push_back ( newAnimal );
-
+                std::cout << "spawn appsystem" << std::endl;
         }
 
         animal->setSpawnAbility ( false );

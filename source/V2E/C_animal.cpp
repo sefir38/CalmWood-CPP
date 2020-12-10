@@ -150,10 +150,32 @@ bool Animal::isDead()
         return death;
 }
 
-bool Animal::isSpawn ()
+bool Animal::isSpawn()
 {
+        std::cout << "[DEBUG] isspawn " << std::endl;
+        std::cout << spawnAbility << std::endl;
+
         return spawnAbility;
 }
+
+bool Animal::isReproduction()
+{
+        std::cout << "[DEBUG] feconded " << std::endl;
+        return feconded;
+}
+
+int Animal::setReproductionState( bool reproductionState )
+{
+        feconded = reproductionState;
+        return 0;
+}
+
+Animal * Animal::getFecondedAnimal()
+{
+        return fecondedAnimal;
+}
+
+
 
 bool Animal::getHiddenState()
 {
@@ -166,15 +188,19 @@ bool Animal::isGrowing()
 }
 
 
-int Animal::setSpawnAbility ( bool newSpawnAbility ) // RDI + offset
+int Animal::setSpawnAbility( bool newSpawnAbility ) // RDI + offset
 {
-        if ( newSpawnAbility ) // Careful this is string in assembly !!! so test sil, sil
-                deadProbability = deadProbability - 30 < 0 ? 0 : deadProbability - 30;
-        if ( ! newSpawnAbility )
-                deadProbability += 30;
-
+        //isSpawn()//if ( newSpawnAbility ) // Careful this is string in assembly !!! so test sil, sil
         spawnAbility = newSpawnAbility;
-        return 0;
+        //deadProbability = deadProbability - 30 < 0 ? 0 : deadProbability - 30;
+        std::cout << "setspawnability" << std::endl;
+        std::cout << spawnAbility << std::endl;
+        return spawnAbility;
+        // if ( ! newSpawnAbility )
+        //         deadProbability += 30;
+
+        //spawnAbility = newSpawnAbility;
+        //return 0;
 
 }
 
@@ -212,15 +238,15 @@ int Animal::detection ( Environment * environment )
         std::vector<std::vector<int>> detectionRange;
 
 
-        if (environment->getCell ( currentX, currentY )->getCellContentSpecs() [0] == 0 )
-                deadType=2;
-                dead ( environment );
-        if (environment->getCell ( currentX, currentY )->getCellContentSpecs() [0] == 1 )
-                deadType=2;
-                dead ( environment );
-        if (environment->getCell ( currentX, currentY )->getCellContentSpecs() [0] == 4 )
-                deadType=2;
-                dead ( environment );
+        // if (environment->getCell ( currentX, currentY )->getCellContentSpecs() [0] == 0 )
+        //         deadType=2;
+        //         dead ( environment );
+        // if (environment->getCell ( currentX, currentY )->getCellContentSpecs() [0] == 1 )
+        //         deadType=2;
+        //         dead ( environment );
+        // if (environment->getCell ( currentX, currentY )->getCellContentSpecs() [0] == 4 )
+        //         deadType=2;
+        //         dead ( environment );
 
         for ( int i = ( 0 - detectionRadius[growthState] ); i <= detectionRadius[growthState]; ++i ) {
                 for ( int j = ( 0 - detectionRadius[growthState] ); j <= detectionRadius[growthState]; ++j ) {
@@ -337,17 +363,20 @@ int Animal::growth ( Environment * environment )
 
 int Animal::reproduction ( std::unordered_multimap<int, Animal *> * VisibleAnimals, int specie )
 {
-        std::pair<MMAnimalIterator, MMAnimalIterator> LeucoFound = VisibleAnimals->equal_range ( 0 );
+        std::pair<MMAnimalIterator, MMAnimalIterator> LeucoFound = VisibleAnimals->equal_range ( specie );
 
         int trigger = 0;
-
+        
         for ( MMAnimalIterator it = LeucoFound.first; it != LeucoFound.second; ++it ) {
-                if ( it->second->getSex() == 1 && ! it->second->getHiddenState() ) {
+                if ( it->second->getSex() == 1  ) { //&& ! it->second->getHiddenState() == false
                         trigger = runRNG ( 0,100 );
-                        if ( trigger < reproductionProbability ) {
-                                it->second->setSpawnAbility ( true );
+                        if ( trigger < 100 ) { //reproductionProbability
+                                it->second->setSpawnAbility(1);//it->second->isSpawn(1);//it->second->setSpawnAbility(1) ;
+                                fecondedAnimal = it->second;
+                                feconded = true;
                                 protectTerritory = false;
                                 detectionRadius[2] = oldDetectionRadius;
+                                
                                 return 0;
                         }
                 }
@@ -355,6 +384,22 @@ int Animal::reproduction ( std::unordered_multimap<int, Animal *> * VisibleAnima
 
         return 0;
 }
+
+// int Animal::reproduction ( std::unordered_multimap<int, Animal *> * VisibleAnimals, int specie )
+// {
+//         std::pair<MMAnimalIterator, MMAnimalIterator> LeucoFound = VisibleAnimals->equal_range ( 0 );
+        
+//         for ( MMAnimalIterator it = LeucoFound.first; it != LeucoFound.second; ++it ) {
+//                 if ( it->second->getSex() == 1  ) { 
+//                         it->second->setSpawnAbility ( true );
+//                         return 0;
+//                 }
+//         }
+
+//         return 0;
+// }
+
+
 
 // int Animal::attack ( Environment * environment, std::unordered_multimap<int, Animal *> * VisibleAnimals, int intruderX, int intruderY, int specie )
 // {
@@ -386,6 +431,8 @@ int Animal::dead ( Environment * environment )
 
 int Animal::attack ( Environment * environment, std::unordered_multimap<int, Animal *> * VisibleAnimals, int intruderX, int intruderY, int specie )
 {
+        std::pair<MMAnimalIterator, MMAnimalIterator> AnimalFound = VisibleAnimals->equal_range ( specie );
+        
         std::pair<MMAnimalIterator, MMAnimalIterator> LeucoFound = VisibleAnimals->equal_range ( 0 );
         std::pair<MMAnimalIterator, MMAnimalIterator> HylaFound = VisibleAnimals->equal_range ( 1 );
         std::pair<MMAnimalIterator, MMAnimalIterator> ViperaFound = VisibleAnimals->equal_range ( 4 );
@@ -407,9 +454,9 @@ int Animal::attack ( Environment * environment, std::unordered_multimap<int, Ani
         }
         }
 
-        if (id == 1){
+        if (id == 1 && gt == 2){
                 for ( MMAnimalIterator it = LeucoFound.first; it != LeucoFound.second; ++it ) {
-                if (it->second->getGrowthState() == 1){
+                if (it->second->getGrowthState() == 0){
                         it->second-> dead(environment);
                         eat();
                 }
