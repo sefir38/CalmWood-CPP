@@ -145,7 +145,7 @@ class Leucorrhinia: public Animal
 public :
         Leucorrhinia ( int id = 0,
                        std::string newName = "leucorrhinia",
-                       std::vector<unsigned int> lifeCycle = {1,24,1},
+                       std::vector<unsigned int> lifeCycle = {1,1,1},
                        std::vector<int> probabilities = {80,70,20,80,40,10,0,80},
                        std::vector<int> detectionRadius = {1,1,2},
                        std::vector<int> actionRadius = {1,1,1},
@@ -163,7 +163,7 @@ class Hyla: public Animal
 public :
         Hyla ( int id = 1, 
         std::string newName = "hyla",
-        std::vector<unsigned int> lifeCycle = {1,24,1},
+        std::vector<unsigned int> lifeCycle = {1,1,1},
         std::vector<int> probabilities = {80,70,20,80,40,10,0,60},
         std::vector<int> detectionRadius = {1,1,2},
         std::vector<int> actionRadius = {1,1,1},
@@ -197,7 +197,7 @@ class Vipera: public Animal
 public :
         Vipera ( int id = 4, 
         std::string newName = "vipera",
-        std::vector<unsigned int> lifeCycle = {1,24,1},
+        std::vector<unsigned int> lifeCycle = {1,1,1},
         std::vector<int> probabilities = {80,70,20,1,40,10,0,60},
         std::vector<int> detectionRadius = {1,1,2},
         std::vector<int> actionRadius = {1,1,1},
