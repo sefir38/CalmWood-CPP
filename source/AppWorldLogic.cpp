@@ -158,25 +158,32 @@ int AppWorldLogic::createAnimal ( Animal * animal )
         if ( animal->getGrowthState() == 2 ) {
 
                 meshPathStr = "animals_assets/A_" + animal->getName() + ".fbx/" + animal->getName() + ".mesh" ;
+                std::cout<<meshPathStr<<std::endl;
                 meshPathConst = meshPathStr.c_str();
 
+
                 temporaryMesh = ObjectMeshSkinned::create ( meshPathConst );
+                if (animal->getID()==0){
 
-                meshPathStr = "animals_assets/A_" + animal->getName() + ".fbx/A_" + animal->getName() + ".anim" ;
+                        meshPathStr = "animals_assets/A_" + animal->getName() + ".fbx/A_" + animal->getName() + ".anim" ;
 
-                temporaryMesh->setAnimation ( 0, meshPathStr.c_str() );
+                        temporaryMesh->setAnimation ( 0, meshPathStr.c_str() );
 
-                temporaryMesh->setSpeed ( 60.0f );
+                        temporaryMesh->setSpeed ( 60.0f );
 
-                temporaryMesh->play();
+                        temporaryMesh->play();
 
-                temporaryMesh->setLoop ( 1 );
+                        temporaryMesh->setLoop ( 1 );
 
-                direction = runRNG( -180, 180 );
+                        direction = runRNG( -180, 180 );
 
-                agentLocation = animal->getLocation();
+                        agentLocation = animal->getLocation();
 
-                temporaryMesh->setPosition ( Vec3 ( ( float ) agentLocation[0], ( float ) agentLocation[1], 0.5f ) );
+                }
+                if (animal->getID()==0)
+                        temporaryMesh->setPosition ( Vec3 ( ( float ) agentLocation[0], ( float ) agentLocation[1], 0.7f ) );
+                else if (animal->getID()==4)
+                        temporaryMesh->setPosition ( Vec3 ( ( float ) agentLocation[0], ( float ) agentLocation[1], -0.99f ) );
 
                 temporaryMesh->worldRotate(0.0f, 0.0f, static_cast<float> ( direction ));
 

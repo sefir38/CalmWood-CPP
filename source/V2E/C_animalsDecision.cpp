@@ -44,21 +44,25 @@ int Leucorrhinia::decision ( Environment * environment, std::vector<std::unorder
         satietyIndex -= 10;
 
         if ( temperature < 15.0 || temperature > 30.0 ) {
+                setDeadType(2);
                 dead ( environment );
                 return 0;
         }
 
         if ( antropizationRate > 0.8 ) {
+                setDeadType(2);
                 dead ( environment );
                 return 0;
         }
 
         if ( hygrometry < 0.2 || hygrometry > 0.95 ) {
+                setDeadType(2);
                 dead ( environment );
                 return 0;
         }
 
         if ( actionProbability < deadProbability ) {
+                setDeadType(0);
                 dead ( environment );
                 return 0;
         }
@@ -73,6 +77,10 @@ int Leucorrhinia::decision ( Environment * environment, std::vector<std::unorder
 
         if ( actionProbability < eatProbability )
                 eat();
+
+        if (satietyIndex<70){
+                predate ( environment, &VisibleAnimals->at ( choiceProbability ), X, Y,  0);
+        }
 
         if ( growthState == 1 ) {
 
@@ -96,20 +104,18 @@ int Leucorrhinia::decision ( Environment * environment, std::vector<std::unorder
 
                 }
 
-                if ( actionProbability < attackProbability && protectTerritory ) {
+                if ( actionProbability < attackProbability  ) { //&& protectTerritory
 
                         choiceProbability = runRNG ( 0, VisibleAnimals->size()-1 );
 
-                        attack ( environment, &VisibleAnimals->at ( choiceProbability ), X, Y, 0 );
+                        attack ( environment, &VisibleAnimals->at ( choiceProbability ), X, Y, id );
                 }
         }
 
         if ( growthState == 2 ) {
-
+                
                 if ( sex == 0 ) {
-
-                        if ( actionProbability < protectionProbability && month >= 4 && month < 7 && ! protectTerritory ) {
-
+                        if ( actionProbability < 100) { //protectionProbability && month >= 4 && month < 7 && ! protectTerritory
                                 choiceProbability = runRNG ( 0, CellSpecs->size()-1 );
 
                                 while ( CellSpecs->at ( choiceProbability ) [0] == 0 && randomTry < 4 ) {
@@ -132,14 +138,14 @@ int Leucorrhinia::decision ( Environment * environment, std::vector<std::unorder
 
                         }
 
-                        if ( actionProbability < reproductionProbability && protectTerritory ) {
-
+                        if ( actionProbability < 100 ) { //reproductionProbability && protectTerritory
                                 choiceProbability = runRNG ( 0, VisibleAnimals->size()-1 );
 
-                                reproduction ( &VisibleAnimals->at ( choiceProbability ), 0 );
+                                reproduction ( &VisibleAnimals->at ( choiceProbability ), id );
+
                         }
 
-                        if ( actionProbability < attackProbability && protectTerritory ) {
+                        if ( actionProbability < attackProbability ) { //&& protectTerritory
 
                                 choiceProbability = runRNG ( 0, VisibleAnimals->size()-1 );
 
@@ -147,13 +153,12 @@ int Leucorrhinia::decision ( Environment * environment, std::vector<std::unorder
                         }
 
                         if ( month < 4 && month >= 7 )
-                                protectTerritory = false;
+                                protectTerritory = true; //false
                 }
 
                 if ( sex == 1 ) {
 
                         if ( spawnAbility ) {
-
                                 choiceProbability = runRNG ( 0, CellSpecs->size()-1 );
 
                                 while ( ( CellSpecs->at ( choiceProbability ) [3] == 0 || CellSpecs->at ( choiceProbability ) [0] == 0 ) && randomTry < 10 ) {
@@ -195,27 +200,31 @@ int Hyla::decision ( Environment * environment, std::vector<std::unordered_multi
 
         satietyIndex -= 10;
 
-        if ( temperature < 15.0 || temperature > 30.0 ) {
+        if ( temperature < 20.0 || temperature > 28.0 ) {
+                setDeadType(2);
                 dead ( environment );
                 return 0;
         }
 
-        if ( antropizationRate > 0.8 ) {
+        if ( antropizationRate > 0.6 ) {
+                setDeadType(2);
                 dead ( environment );
                 return 0;
         }
 
-        if ( hygrometry < 0.2 || hygrometry > 0.95 ) {
+        if ( hygrometry < 0.6 || hygrometry > 0.9 ) {
+                setDeadType(2);
                 dead ( environment );
                 return 0;
         }
 
         if ( actionProbability < deadProbability ) {
+                setDeadType(0);
                 dead ( environment );
                 return 0;
         }
 
-        if ( month < 5 && month >= 9 && sex == 1 ) {
+        if ( month > 10 && month <= 3 && sex == 1 ) {
                 hidden = true;
                 deadProbability = deadProbability - 30 < 0 ? 0 : deadProbability - 30;
         }
@@ -225,6 +234,10 @@ int Hyla::decision ( Environment * environment, std::vector<std::unordered_multi
 
         if ( actionProbability < eatProbability )
                 eat();
+
+        if (satietyIndex<70){
+                predate ( environment, &VisibleAnimals->at ( choiceProbability ), X, Y,  4);
+        }
 
         if ( growthState == 1 ) {
 
@@ -247,7 +260,7 @@ int Hyla::decision ( Environment * environment, std::vector<std::unordered_multi
                         moveTowards ( environment, X, Y );
 
                 }
-                if ( actionProbability < attackProbability && protectTerritory ) {
+                if ( actionProbability < attackProbability  ) { //&& protectTerritory
 
                         choiceProbability = runRNG ( 0, VisibleAnimals->size()-1 );
 
@@ -259,7 +272,7 @@ int Hyla::decision ( Environment * environment, std::vector<std::unordered_multi
 
                 if ( sex == 0 ) {
 
-                        if ( actionProbability < protectionProbability && month >= 4 && month < 7 && ! protectTerritory ) {
+                        if ( actionProbability < protectionProbability ) {
 
                                 choiceProbability = runRNG ( 0, CellSpecs->size()-1 );
 
@@ -283,18 +296,18 @@ int Hyla::decision ( Environment * environment, std::vector<std::unordered_multi
 
                         }
 
-                        if ( actionProbability < reproductionProbability && protectTerritory ) {
+                        if ( actionProbability < 80  ) {//reproductionProbability
 
                                 choiceProbability = runRNG ( 0, VisibleAnimals->size()-1 );
 
-                                reproduction ( &VisibleAnimals->at ( choiceProbability ), 0 );
+                                reproduction ( &VisibleAnimals->at ( choiceProbability ), id );
                         }
 
-                        if ( actionProbability < attackProbability && protectTerritory ) {
+                        if ( actionProbability < attackProbability  ) { //&& protectTerritory
 
                                 choiceProbability = runRNG ( 0, VisibleAnimals->size()-1 );
 
-                                attack ( environment, &VisibleAnimals->at ( choiceProbability ), X, Y, 0 );
+                                attack ( environment, &VisibleAnimals->at ( choiceProbability ), X, Y, 0);
                         }
 
                         if ( month < 4 && month >= 7 )
@@ -358,21 +371,25 @@ int Vipera::decision ( Environment * environment, std::vector<std::unordered_mul
         satietyIndex -= 10;
 
         if ( temperature < 15.0 || temperature > 30.0 ) {
+                setDeadType(2);
                 dead ( environment );
                 return 0;
         }
 
         if ( antropizationRate > 0.8 ) {
+                setDeadType(2);
                 dead ( environment );
                 return 0;
         }
 
         if ( hygrometry < 0.2 || hygrometry > 0.95 ) {
+                setDeadType(2);
                 dead ( environment );
                 return 0;
         }
 
         if ( actionProbability < deadProbability ) {
+                setDeadType(0);
                 dead ( environment );
                 return 0;
         }
@@ -387,6 +404,10 @@ int Vipera::decision ( Environment * environment, std::vector<std::unordered_mul
 
         if ( actionProbability < eatProbability )
                 eat();
+
+        if (satietyIndex<70){
+                predate ( environment, &VisibleAnimals->at ( choiceProbability ), X, Y,  4);
+        }
 
         if ( growthState == 1 ) { 
 
@@ -408,11 +429,11 @@ int Vipera::decision ( Environment * environment, std::vector<std::unordered_mul
 
                         moveTowards ( environment, X, Y );
 
-                if ( actionProbability < attackProbability && protectTerritory ) {
+                if ( actionProbability < attackProbability ) { //&& protectTerritory
 
                                 choiceProbability = runRNG ( 0, VisibleAnimals->size()-1 );
 
-                                attack ( environment, &VisibleAnimals->at ( choiceProbability ), X, Y, 0 );
+                                attack ( environment, &VisibleAnimals->at ( choiceProbability ), X, Y, id );
                         }
                 }
         }
@@ -445,18 +466,18 @@ int Vipera::decision ( Environment * environment, std::vector<std::unordered_mul
 
                         }
 
-                        if ( actionProbability < reproductionProbability && protectTerritory ) {
+                        if ( actionProbability < 100 ) {//reproductionProbability
 
                                 choiceProbability = runRNG ( 0, VisibleAnimals->size()-1 );
 
-                                reproduction ( &VisibleAnimals->at ( choiceProbability ), 0 );
+                                reproduction ( &VisibleAnimals->at ( choiceProbability ), id );
                         }
 
                         if ( actionProbability < attackProbability && protectTerritory ) {
 
                                 choiceProbability = runRNG ( 0, VisibleAnimals->size()-1 );
 
-                                attack ( environment, &VisibleAnimals->at ( choiceProbability ), X, Y, 0 );
+                                attack ( environment, &VisibleAnimals->at ( choiceProbability ), X, Y,  1);
                         }
 
                         if ( month < 4 && month >= 7 )

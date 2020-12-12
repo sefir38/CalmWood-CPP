@@ -278,7 +278,7 @@ unsigned int Environment::getOriginYear()
 std::vector<float> Environment::getEnvironmentParameters()
 {
 
-        std::vector<float> parameters {temperature,hygrometry,anthropizationRate};
+        std::vector<float> parameters {temperature,hygrometry,0.7};
 
         return parameters;
 }
@@ -316,6 +316,7 @@ int Environment::mapParser ( std::string level )
 
         temperature = std::stof ( parametersElement->FirstChildElement ( "temperature" )->GetText() );
         hygrometry = std::stof ( parametersElement->FirstChildElement ( "hygrometry" )->GetText() );
+
         mapLength = std::stoi ( parametersElement->FirstChildElement ( "mapLength" )->GetText() );
         mapLength = mapLength > 300 ? 300 : mapLength;
         monthOfYear = std::stoi ( parametersElement->FirstChildElement ( "monthOfYear" )->GetText() );

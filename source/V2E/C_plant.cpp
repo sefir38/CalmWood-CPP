@@ -47,6 +47,17 @@ int Plant::growth ( int targetState )
         return 0;
 }
 
+int Plant::getDeadType()
+{
+    return deadType;
+}
+
+int Plant::setDeadType(int i)
+{
+    deadType=i;
+    return 0;
+}
+
 int Plant::damage()
 {
         return 0;
@@ -80,3 +91,40 @@ bool Plant::isDead()
     return death;
 }
 
+int Plant::decision ( Environment * environment)
+{
+
+        int month = environment->getMonth();
+
+        int X = 0;
+        int Y = 0;
+        int randomTry = 0;
+
+        float temperature = environment->getEnvironmentParameters() [0];
+        float hygrometry = environment->getEnvironmentParameters() [1];
+        float antropizationRate = environment->getEnvironmentParameters() [2];
+
+
+
+
+        if ( temperature < 5.0 || temperature > 30.0 ) {
+
+                dead ( environment );
+                setDeadType(0);
+                return 0;
+        }
+
+        if ( antropizationRate > 0.8 ) {
+                dead ( environment );
+                setDeadType(0);
+                return 0;
+        }
+
+        if ( hygrometry < 0.1 || hygrometry > 0.95 ) {
+                dead ( environment );
+                setDeadType(0);
+                return 0;
+        }
+
+        return 0;
+}

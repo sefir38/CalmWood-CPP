@@ -28,7 +28,7 @@ class AppSystemLogic : public Unigine::SystemLogic
 public:
     AppSystemLogic();
     virtual ~AppSystemLogic();
-
+    int write_data(string file, string content);
     int init() override;
 
     int update() override;
@@ -46,13 +46,37 @@ public:
     int getDeadCount();
     
     int getSpawnCount();
+    int setDeadTypeCountAn();
+    int setDeadTypeCountPl();
+    int setDeadCountAn();
 
 protected :
     
     vector<Animal *>::iterator agentAnimal;
     vector<Plant *>::iterator agentPlant;
 
-    int deadCount = 0;
+    int deadNatCount= 0;
+    int deadStarvCount=0;
+    int deadEnvCount=0;
+    int deadPredCount=0;
+    vector<int>deadLeuco{deadNatCount,deadStarvCount,deadEnvCount,deadPredCount};
+    vector<int>deadHyla{deadNatCount,deadStarvCount,deadEnvCount,deadPredCount};
+    vector<int>deadVipera{deadNatCount,deadStarvCount,deadEnvCount,deadPredCount};
+    vector<int>deadLeucoVector{};
+    vector<int>deadHylaVector{};
+    vector<int>deadViperaVector{};
+
+    int deadCount=0;
+    int deadLeucoCount=0;
+    int deadHylaCount=0;
+    int deadViperaCount=0;
+
+
+    int deadEnvCountCarex=0;
+    int deadPredCountCarex=0;
+    vector<int>deadCarex{deadEnvCount,deadPredCount};
+    vector<int>deadCountVectorCarex{};
+    int deadCountCarex=0;
     int spawnCount = 0;
 
     bool simulationEnd = false;

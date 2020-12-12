@@ -36,11 +36,15 @@ public:
     
     int dead(Environment * environment);
     bool isDead();
+    int getDeadType();
+    int setDeadType(int deadType);
+    int decision(Environment * environment);
 
 protected :
     int id=0;
     std::string name;
-
+    int damage_score=0;     
+    int deadType=-1;
     bool death = false;
     std::vector <int> location{0,0,0};
 
@@ -68,6 +72,7 @@ class Carex: public Plant
 {
 public :
     Carex ( int id = 3 ) :Plant ( id ) {}
+    int decision(Environment * environment);
 };
 
 class Iris: public Plant
