@@ -32,7 +32,7 @@ To build this project with unigine ( development version or release ) :
 
 3. Clone or download this repository
 
-4. Download data directory here : https://mega.nz/file/bo9nkCJA#wrakdc0x_a2-oCQz_aQlA-Q1qM4e9LJvyZQ9qJsOKMo
+4. Download data directory here : https://fromsmash.com/data_sentinel
 
 5. Put the directory in the project root directory
 
