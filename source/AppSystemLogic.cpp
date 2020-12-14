@@ -221,7 +221,7 @@ int AppSystemLogic::update()
 
                                         --agentAnimal;
                                 }
-                                if ( ( *agentAnimal )->isReproduction() ) { //>isSpawn()
+                                else if ( ( *agentAnimal )->isReproduction() ) { //>isSpawn()
                                         if (( *agentAnimal )->getID()==0)
                                                 spawnCountL += ( *agentAnimal )->getSpawnNumber();
                                         else if (( *agentAnimal )->getID()==1)
@@ -232,15 +232,14 @@ int AppSystemLogic::update()
                                         spawn ( ( *agentAnimal )->getFecondedAnimal()  );
                                         ( *agentAnimal )->setReproductionState( false );
                                         cout << "update spawn " << std::endl;
-                                        spawnCount+= ( *agentAnimal )->getSpawnNumber();
+                                        //spawnCount+= ( *agentAnimal )->getSpawnNumber();
                                 } 
 
-                                spawnCount += ( *agentAnimal )->getSpawnNumber();
 
                                 if ( ( *agentPlant )->isDead() ) {
                                         
                                         deadCountCarex += 1;
-                                        agentPlant = plants.erase ( agentPlant );
+                                        agentPlant =     plants.erase ( agentPlant );
 
                                         --agentPlant;
                                 }
@@ -276,10 +275,15 @@ int AppSystemLogic::update()
         }
         float nbr_agent_total=environment.MaxNumberAgentByTypeAnimal[( *agentAnimal )->getID()]*float(environment.MaxNumberAgentAnimal);
         
-        deadLeucoVector.push_back(nbr_agent_total-deadLeucoCount+spawnCountL);
+        // deadLeucoVector.push_back(nbr_agent_total-deadLeucoCount+spawnCountL);
         
-        deadHylaVector.push_back(nbr_agent_total-deadHylaCount+spawnCountH);  
-        deadViperaVector.push_back(nbr_agent_total-deadViperaCount+spawnCountV);
+        // deadHylaVector.push_back(nbr_agent_total-deadHylaCount+spawnCountH);  
+        // deadViperaVector.push_back(nbr_agent_total-deadViperaCount+spawnCountV);
+        // deadCountVectorCarex.push_back(deadCountCarex);
+        deadLeucoVector.push_back(deadLeucoCount);
+        
+        deadHylaVector.push_back(deadHylaCount);  
+        deadViperaVector.push_back(deadViperaCount);
         deadCountVectorCarex.push_back(deadCountCarex);
         return 1;
 }
