@@ -18,6 +18,11 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <random>
+#include <chrono>
 
 #include <UnigineApp.h>
 #include <UnigineConsole.h>
@@ -56,6 +61,20 @@ using namespace Math;
 AppSystemLogic::AppSystemLogic() {}
 
 AppSystemLogic::~AppSystemLogic() {}
+
+int AppSystemLogic::write_data(string file, string content){
+
+    ofstream fichier(file); //j'ouvre un fichier 
+    cout << "write" << endl;
+    if(fichier){
+        fichier << content;
+        fichier.close();
+    } else {
+         cerr << "Impossible d'ouvrir le fichier !" << endl;
+         return 1;
+    }
+    return 0;
+}
 
 int AppSystemLogic::init()
 {
@@ -120,7 +139,7 @@ int AppSystemLogic::init()
                                 newPlant = new Glyceria();
                                 break ;
                         case 3 :
-                                newPlant = new Carex();
+                                newPlant = new Carex(3);
                                 break ;
                         case 4 :
                                 newPlant = new Iris();
@@ -169,19 +188,13 @@ int AppSystemLogic::update()
                                 runShuffle ( &animals );
                                 agentAnimal = animals.begin();
                         }
-                        // for ( int agent = 0; agent < environment.MaxAgentRun; ++agent ) {
-                        //         cout << (*agentAnimal)->isSpawn() << std::endl;
-                        //         if ( ( *agentAnimal )->isSpawn() ) { //>isSpawn()
-                        //                 spawnCount += 1;
-                        //                 spawn ( ( *agentAnimal ) );
-                        //                 cout << "update spawn " << std::endl;
-                        //         if (0==0){
-                        //                 spawn ( ( *agentAnimal ) );
-                        //                 cout << "update spawn 2 " << std::endl;
-                        //         }
 
-                        //         }
-                        // }
+                        if ( agentPlant == plants.end() ) {
+                                runShuffle ( &plants );
+                                agentPlant = plants.begin();
+                        }
+
+
                         for ( int agent = 0; agent < environment.MaxAgentRun; ++agent ) {
 
                                 ( *agentAnimal )->run ( &environment );
@@ -193,38 +206,12 @@ int AppSystemLogic::update()
                                 
                                 
                                 if ( ( *agentAnimal )->isDead() ) {
-                                        //compter le nombre de mort nature (vieillesse, probabilité) par espèce
-                                        if((*agentAnimal)->getDeadType()==0 && (*agentAnimal)->getID()==0)
-                                                deadLeuco[(*agentAnimal)->getDeadType()]+=1;
-                                        if((*agentAnimal)->getDeadType()==0 && (*agentAnimal)->getID()==1)
-                                                deadHyla[(*agentAnimal)->getDeadType()]+=1;
-                                        if((*agentAnimal)->getDeadType()==0 && (*agentAnimal)->getID()==4)
-                                                deadVipera[(*agentAnimal)->getDeadType()]+=1;
-                                        //mort de faim (saciety index)
-                                        if((*agentAnimal)->getDeadType()==1 && (*agentAnimal)->getID()==0)
-                                                deadLeuco[(*agentAnimal)->getDeadType()]+=1;
-                                        if((*agentAnimal)->getDeadType()==1 && (*agentAnimal)->getID()==1)
-                                                deadHyla[(*agentAnimal)->getDeadType()]+=1;
-                                        if((*agentAnimal)->getDeadType()==1 && (*agentAnimal)->getID()==4)
-                                                deadVipera[(*agentAnimal)->getDeadType()]+=1;
-                                        //mort sous contrainte environnementale
-                                        if((*agentAnimal)->getDeadType()==2 && (*agentAnimal)->getID()==0)
-                                                deadLeuco[(*agentAnimal)->getDeadType()]+=1;
-                                        if((*agentAnimal)->getDeadType()==2 && (*agentAnimal)->getID()==1)
-                                                deadHyla[(*agentAnimal)->getDeadType()]+=1;
-                                        if((*agentAnimal)->getDeadType()==2 && (*agentAnimal)->getID()==4)
-                                                deadVipera[(*agentAnimal)->getDeadType()]+=1;
-                                        //mort par prédation
-                                        if((*agentAnimal)->getDeadType()==3 && (*agentAnimal)->getID()==0)
-                                                deadLeuco[(*agentAnimal)->getDeadType()]+=1;
-                                        if((*agentAnimal)->getDeadType()==3 && (*agentAnimal)->getID()==1)
-                                                deadHyla[(*agentAnimal)->getDeadType()]+=1;
-                                        if((*agentAnimal)->getDeadType()==3 && (*agentAnimal)->getID()==4)
-                                                deadVipera[(*agentAnimal)->getDeadType()]+=1;
-                                        cout << "update mort " << std::endl;
-                                        //cout << (*agentAnimal)->getID() << std::endl;
+                                        setDeadTypeCountAn();
+                                        setDeadCountAn();
                                         deadCount += 1;
+                                        
                                         agentAnimal = animals.erase ( agentAnimal );
+                                        
 
                                         if ( animals.empty() ) {
                                                 simulationEnd = true;
@@ -235,11 +222,27 @@ int AppSystemLogic::update()
                                         --agentAnimal;
                                 }
                                 else if ( ( *agentAnimal )->isReproduction() ) { //>isSpawn()
-                                        spawnCount += 1;
+                                        if (( *agentAnimal )->getID()==0)
+                                                spawnCountL += ( *agentAnimal )->getSpawnNumber();
+                                        else if (( *agentAnimal )->getID()==1)
+                                                spawnCountH += ( *agentAnimal )->getSpawnNumber();
+                                        else if (( *agentAnimal )->getID()==4)
+                                                spawnCountV += ( *agentAnimal )->getSpawnNumber();
+
                                         spawn ( ( *agentAnimal )->getFecondedAnimal()  );
                                         ( *agentAnimal )->setReproductionState( false );
                                         cout << "update spawn " << std::endl;
+                                        //spawnCount+= ( *agentAnimal )->getSpawnNumber();
                                 } 
+
+
+                                if ( ( *agentPlant )->isDead() ) {
+                                        
+                                        deadCountCarex += 1;
+                                        agentPlant =     plants.erase ( agentPlant );
+
+                                        --agentPlant;
+                                }
                                 
                                 runTime = environment.RunDuration;
 
@@ -270,7 +273,18 @@ int AppSystemLogic::update()
                 simulationTime -= ifps;
                 timeDuration -= ifps;
         }
-
+        float nbr_agent_total=environment.MaxNumberAgentByTypeAnimal[( *agentAnimal )->getID()]*float(environment.MaxNumberAgentAnimal);
+        
+        // deadLeucoVector.push_back(nbr_agent_total-deadLeucoCount+spawnCountL);
+        
+        // deadHylaVector.push_back(nbr_agent_total-deadHylaCount+spawnCountH);  
+        // deadViperaVector.push_back(nbr_agent_total-deadViperaCount+spawnCountV);
+        // deadCountVectorCarex.push_back(deadCountCarex);
+        deadLeucoVector.push_back(deadLeucoCount);
+        
+        deadHylaVector.push_back(deadHylaCount);  
+        deadViperaVector.push_back(deadViperaCount);
+        deadCountVectorCarex.push_back(deadCountCarex);
         return 1;
 }
 
@@ -326,6 +340,24 @@ int AppSystemLogic::shutdown()
         cout << "Antrhopization at the end of the simulation : " << environment.getEnvironmentParameters() [2] << endl;
         cout << "Number of Leucorrhinia mort naturellement : " << deadLeuco[0] << endl;
 
+        string filename="data.txt";
+        string final;
+        string content1;
+        string content2;
+        string content3;
+        for (int i=0; i<deadLeucoVector.size();++i){
+        //content += to_string(deadLeuco.at(0))+"\t"+to_string(deadLeuco.at(1))+"\t"+to_string(deadLeuco.at(2))+"\t"+to_string(deadLeuco.at(3))+"\n"+to_string(deadHyla.at(0))+"\t"+to_string(deadHyla.at(1))+"\t"+to_string(deadHyla.at(2))+"\t"+to_string(deadHyla.at(3))+"\n"+to_string(deadVipera.at(0))+"\t"+to_string(deadVipera.at(1))+"\t"+to_string(deadVipera.at(2))+"\t"+to_string(deadVipera.at(3))+"\n";
+                content1 += to_string(deadLeucoVector.at(i))+" ";
+                
+                content2 += to_string(deadHylaVector.at(i))+" ";
+                content3 += to_string(deadViperaVector.at(i))+" ";
+                
+                
+        
+        }
+        
+        final=content1+"\n"+content2+"\n"+content3;
+        write_data(filename, final);
         return 1;
 }
 
@@ -378,4 +410,59 @@ int AppSystemLogic::getSpawnCount()
 {
         return spawnCount;
 }
+
+int AppSystemLogic::setDeadCountAn()
+{
+        switch ((*agentAnimal)->getID())
+        {
+                case 0:
+                        deadLeucoCount+=1;
+                        break;
+                case 1:   
+                        deadHylaCount+=1;
+                        break;
+                case 4:
+                        deadViperaCount+=1;
+                        break;
+                
+                default:
+                        break;
+        }
+        
+        return 0;
+}
+
+int AppSystemLogic::setDeadTypeCountAn()
+{
+        switch ((*agentAnimal)->getID())
+        {
+                case 0:
+                        deadLeuco[(*agentAnimal)->getDeadType()]+=1;                    
+                        
+                        break;
+                case 1:
+                        deadHyla[(*agentAnimal)->getDeadType()]+=1;                                   
+                        break;
+                case 4:
+                        deadVipera[(*agentAnimal)->getDeadType()]+=1;
+
+                        break;
+                
+                default:
+                        break;
+        }
+        
+        return 0;
+}
+
+int AppSystemLogic::setDeadTypeCountPl()
+{
+        deadCarex[(*agentPlant)->getDeadType()]+=1;
+        deadCountCarex+=1;
+        deadCountVectorCarex.push_back(deadCountCarex);
+        
+        return 0;
+} 
+
+
 
