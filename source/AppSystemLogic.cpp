@@ -165,7 +165,7 @@ int AppSystemLogic::init()
 
         agentPlant = plants.begin();
 
-        //environment.setEnvironmentParameters ( 25,0.5,0.7);
+        environment.setEnvironmentParameters ( 25,0.5,0.7 );
 
         return 1;
 }
@@ -198,7 +198,7 @@ int AppSystemLogic::update()
                         for ( int agent = 0; agent < environment.MaxAgentRun; ++agent ) {
 
                                 ( *agentAnimal )->run ( &environment );
-                                
+                                //std::cout <<  ( *agentAnimal )->isDead()  << std::endl;
                                 if ( ( *agentAnimal )->isGrowing() && ( *agentAnimal )->getGrowthState() == 2 ) {
                                         worldlogic_ptr->createAnimal ( ( *agentAnimal ) );
                                         ( *agentAnimal )->growthFinished();
@@ -209,6 +209,7 @@ int AppSystemLogic::update()
                                         setDeadTypeCountAn();
                                         setDeadCountAn();
                                         deadCount += 1;
+                                        
                                         agentAnimal = animals.erase ( agentAnimal );
                                         
 
@@ -221,11 +222,20 @@ int AppSystemLogic::update()
                                         --agentAnimal;
                                 }
                                 if ( ( *agentAnimal )->isReproduction() ) { //>isSpawn()
-                                        spawnCount += ( *agentAnimal )->getSpawnNumber();
+                                        if (( *agentAnimal )->getID()==0)
+                                                spawnCountL += ( *agentAnimal )->getSpawnNumber();
+                                        else if (( *agentAnimal )->getID()==1)
+                                                spawnCountH += ( *agentAnimal )->getSpawnNumber();
+                                        else if (( *agentAnimal )->getID()==4)
+                                                spawnCountV += ( *agentAnimal )->getSpawnNumber();
+
                                         spawn ( ( *agentAnimal )->getFecondedAnimal()  );
                                         ( *agentAnimal )->setReproductionState( false );
                                         cout << "update spawn " << std::endl;
+                                        spawnCount+= ( *agentAnimal )->getSpawnNumber();
                                 } 
+
+                                spawnCount += ( *agentAnimal )->getSpawnNumber();
 
                                 if ( ( *agentPlant )->isDead() ) {
                                         
@@ -264,11 +274,13 @@ int AppSystemLogic::update()
                 simulationTime -= ifps;
                 timeDuration -= ifps;
         }
-        deadLeucoVector.push_back(deadLeucoCount);
-        deadHylaVector.push_back(deadHylaCount);  
-        deadViperaVector.push_back(deadViperaCount);
+        float nbr_agent_total=environment.MaxNumberAgentByTypeAnimal[( *agentAnimal )->getID()]*float(environment.MaxNumberAgentAnimal);
+        
+        deadLeucoVector.push_back(nbr_agent_total-deadLeucoCount+spawnCountL);
+        
+        deadHylaVector.push_back(nbr_agent_total-deadHylaCount+spawnCountH);  
+        deadViperaVector.push_back(nbr_agent_total-deadViperaCount+spawnCountV);
         deadCountVectorCarex.push_back(deadCountCarex);
-
         return 1;
 }
 
@@ -323,10 +335,6 @@ int AppSystemLogic::shutdown()
 
         cout << "Antrhopization at the end of the simulation : " << environment.getEnvironmentParameters() [2] << endl;
         cout << "Number of Leucorrhinia mort naturellement : " << deadLeuco[0] << endl;
-        cout << "Number of CAREX mort naturellement : " << deadCountCarex<< endl;
-        cout << "Number of Hyla mort naturellement : " << deadHyla[0] << endl;
-
-
 
         string filename="data.txt";
         string final;
@@ -405,19 +413,12 @@ int AppSystemLogic::setDeadCountAn()
         {
                 case 0:
                         deadLeucoCount+=1;
-
-                        
-
-                        
                         break;
                 case 1:   
                         deadHylaCount+=1;
-                             
                         break;
                 case 4:
                         deadViperaCount+=1;
-
-                        
                         break;
                 
                 default:

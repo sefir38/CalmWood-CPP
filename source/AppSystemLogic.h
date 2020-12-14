@@ -78,6 +78,11 @@ protected :
     vector<int>deadCountVectorCarex{};
     int deadCountCarex=0;
     int spawnCount = 0;
+    int spawnCountL= 0;
+    int spawnCountH = 0;
+    int spawnCountV = 0;  
+    
+
 
     bool simulationEnd = false;
     float ifps = 0.0;

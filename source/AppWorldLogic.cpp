@@ -182,6 +182,9 @@ int AppWorldLogic::createAnimal ( Animal * animal )
                 }
                 if (animal->getID()==0)
                         temporaryMesh->setPosition ( Vec3 ( ( float ) agentLocation[0], ( float ) agentLocation[1], 0.7f ) );
+                else if (animal->getID()==0)
+                        temporaryMesh->setPosition ( Vec3 ( ( float ) agentLocation[0], ( float ) agentLocation[1], -0.99f ) );
+
                 else if (animal->getID()==4)
                         temporaryMesh->setPosition ( Vec3 ( ( float ) agentLocation[0], ( float ) agentLocation[1], -0.99f ) );
 

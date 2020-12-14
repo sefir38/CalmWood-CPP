@@ -41,10 +41,13 @@ public :
         int removePlant ( int ID, Plant * plant );
         int removeAnimal ( int ID, Animal * animal );
         int addPlant ( int ID, Plant * plant );
+        
+
 
         std::unordered_multimap<int, Animal *> getCellContentAnimals();
         std::unordered_multimap<int, Plant *> getCellContentPlants();
         std::vector<int> getCellContentSpecs();
+        
 
         int setTrees( int status );
         int setAnthropization( int status );
@@ -52,6 +55,7 @@ public :
         int setViability( int status );
         int setWater( int status );
         int setRates( std::vector<int> rates );
+        
 
 protected :
 
@@ -71,6 +75,8 @@ protected :
 
         std::unordered_multimap<int, Animal *> AnimalCellContent;
         std::unordered_multimap<int, Plant *> PlantCellContent;
+
+
 
 };
 
@@ -122,6 +128,7 @@ public :
         int MaxRunPerRunTime = 0;
         int MaxRunTime = 0;
         float RunDuration = 0;
+        
 
 protected :
         float temperature = 0.0;
@@ -142,6 +149,7 @@ protected :
         std::unordered_map<std::string, std::string> mapContent;
         std::vector<std::vector<std::string>> mapCells{300};
         std::unordered_map<std::string,std::vector<int>> mapCellsParameters;
+        
 
 };
 

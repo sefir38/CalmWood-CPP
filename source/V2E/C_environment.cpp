@@ -83,6 +83,8 @@ int Cell::removeAnimal ( int ID, Animal * animal )
         return 0;
 }
 
+
+
 int Cell::removePlant ( int ID, Plant * plant )
 {
         Pumit it = PlantCellContent.begin();
@@ -278,7 +280,7 @@ unsigned int Environment::getOriginYear()
 std::vector<float> Environment::getEnvironmentParameters()
 {
 
-        std::vector<float> parameters {temperature,hygrometry,0.7};
+        std::vector<float> parameters {temperature,hygrometry,anthropizationRate};
 
         return parameters;
 }
@@ -304,6 +306,7 @@ int Environment::mapParser ( std::string level )
 
         doc.LoadFile ( filename.c_str() );
 
+
         attributesElement = doc.FirstChildElement()->FirstChildElement ( "attributes" );
         parametersElement = doc.FirstChildElement()->FirstChildElement ( "parameters" );
         cellsElement = doc.FirstChildElement()->FirstChildElement ( "cells" );
@@ -316,7 +319,6 @@ int Environment::mapParser ( std::string level )
 
         temperature = std::stof ( parametersElement->FirstChildElement ( "temperature" )->GetText() );
         hygrometry = std::stof ( parametersElement->FirstChildElement ( "hygrometry" )->GetText() );
-
         mapLength = std::stoi ( parametersElement->FirstChildElement ( "mapLength" )->GetText() );
         mapLength = mapLength > 300 ? 300 : mapLength;
         monthOfYear = std::stoi ( parametersElement->FirstChildElement ( "monthOfYear" )->GetText() );
@@ -330,6 +332,8 @@ int Environment::mapParser ( std::string level )
         MaxRunTime = std::stoi ( parametersElement->FirstChildElement ( "maxruntime" )->GetText() );
         RunDuration = std::stof ( parametersElement->FirstChildElement ( "runduration" )->GetText() );
         timeType =  parametersElement->FirstChildElement ( "timetype" )->GetText();
+
+        
 
         for ( XMLElement * agent = agentByTypeAnimal->FirstChildElement ( "value" ); agent != NULL; agent = agent->NextSiblingElement ( "value" ) )
                 MaxNumberAgentByTypeAnimal.push_back ( std::stof ( agent->GetText() ) );
@@ -376,7 +380,6 @@ int Environment::mapParser ( std::string level )
 
         std::cout << "Level : " << mapContent.find ( "level" )->second << std::endl;
         std::cout << "Difficulty : " << mapContent.find ( "difficulty" )->second << std::endl;
-
         std::cout << "Temperature : " << temperature << std::endl;
         std::cout << "Hygrometry : " << hygrometry << std::endl;
         std::cout << "MapLength : " << mapLength << std::endl;
@@ -389,6 +392,8 @@ int Environment::mapParser ( std::string level )
         std::cout << "Max number of run : " << MaxRunTime << std::endl;
         std::cout << "Time type : " << timeType << std::endl;
         std::cout << "Run duration : " << RunDuration << std::endl;
+
+        
 
         return 0;
 }

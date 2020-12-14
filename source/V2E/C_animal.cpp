@@ -60,7 +60,7 @@ Animal::Animal ( int newId,
         growthState = isBorn ? 0 : runRNG ( 0,2 );
 
         spawnNumber = newSpawnNumber;
-        deadType=-1;
+        //deadType=-1;
 
 }
 
@@ -388,7 +388,7 @@ int Animal::reproduction ( std::unordered_multimap<int, Animal *> * VisibleAnima
         }
 
         return 0;
-}
+}       
 
 int Animal::attack ( Environment * environment, std::unordered_multimap<int, Animal *> * VisibleAnimals, int intruderX, int intruderY, int specie )
  {
@@ -418,45 +418,51 @@ int Animal::dead ( Environment * environment )
 
 int Animal::predate ( Environment * environment, std::unordered_multimap<int, Animal *> * VisibleAnimals, int intruderX, int intruderY, int specie )
 {
-
         std::pair<MMAnimalIterator, MMAnimalIterator> AnimalFound = VisibleAnimals->equal_range ( specie );
 
         int X, Y = location[0],location[1];
 
         int trigger = 0;
-
+        
         int gt;
         gt = getGrowthState() ;
         int id;
         id = getID();
 
-        if (id == 4){
+        
+
+        if (id == 4 && gt==2){
                 for ( MMAnimalIterator it = AnimalFound.first; it != AnimalFound.second; ++it ) {
-                if (it->second->getGrowthState() == 2 && it->second->getID()==1){
-                        it->second->setDeadType(3);
-                        it->second-> dead(environment);
-                        eat();
-                }
+                
+                        if (it->second->getGrowthState() == 2 && it->second->getID()==1){
+                                it->second->setDeadType(3);
+                                it->second-> dead(environment);
+                                eat();
+                                
+                        }
         }
         }
 
         if (id == 1 && gt==2){
                 for ( MMAnimalIterator it = AnimalFound.first; it != AnimalFound.second; ++it ) {
-                if (it->second->getGrowthState() == 0 && it->second->getID()==0){
-                        it->second->setDeadType(3);
-                        it->second-> dead(environment);
-                        eat();
+                        if (it->second->getGrowthState() == 0 && it->second->getID()==0){
+                                it->second->setDeadType(3);
+                                it->second-> dead(environment);
+                                eat();
+                                
+                        }
                 }
-        }
         }
 
-        if (id == 0){
+        if (id == 0 && gt==1){
                 for ( MMAnimalIterator it = AnimalFound.first; it != AnimalFound.second; ++it ) {
-                if (it->second->getGrowthState() == 1 && it->second->getID()==1){
-                        it->second->setDeadType(3);
-                        it->second-> dead(environment);
-                        eat();
-                }
+
+                        if (it->second->getGrowthState() == 1 && it->second->getID()==1){
+                                it->second->setDeadType(3);
+                                it->second-> dead(environment);
+                                eat();
+                                
+                        }
         }
         }
 

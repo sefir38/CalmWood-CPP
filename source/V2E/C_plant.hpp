@@ -71,7 +71,7 @@ public :
 class Carex: public Plant
 {
 public :
-    Carex ( int id = 3 ) :Plant ( id ) {}
+    Carex ( int id = 3, std::string name="Carex") :Plant ( id ) {}
     int decision(Environment * environment);
 };
 
